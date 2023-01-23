@@ -7,7 +7,7 @@ export default {
     return {
       loading: ref(false),
       email: ref(""),
-      linkSent: false,
+      linkSentTo: "",
       errorMeesage: "",
     };
   },
@@ -15,8 +15,7 @@ export default {
   methods: {
     async handleLogin() {
       this.errorMeesage = "";
-      this.email = "";
-      this.linkSent = false;
+      this.linkSentTo = "";
 
       try {
         this.loading = true;
@@ -30,7 +29,8 @@ export default {
         }
       } finally {
         this.loading = false;
-        this.linkSent = true;
+        this.linkSentTo = this.email;
+        this.email = "";
       }
     },
   },
@@ -41,7 +41,7 @@ export default {
   <main class="bg-zinc-900 h-screen">
     <div class="max-w-xs mx-auto pt-40">
       <form
-        v-if="!linkSent"
+        v-if="!linkSentTo"
         class="flex flex-col"
         @submit.prevent="handleLogin"
       >
@@ -76,7 +76,7 @@ export default {
           v-if="errorMeesage"
           class="mt-10 font-normal text-normal text-red-600"
         >
-          Failed to send login link to email to {{ email }}
+          Failed to send login link to email to {{ linkSentTo }}
         </p>
       </form>
       <div v-else>
@@ -85,7 +85,8 @@ export default {
             Verify your Email
           </h1>
           <p class="font-normal text-sm text-stone-300 mt-1">
-            We sent en email to <span class="text-rose-600">{{ email }}</span>
+            We sent en email to
+            <span class="text-rose-600">{{ linkSentTo }}</span>
           </p>
         </div>
       </div>
