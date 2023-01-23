@@ -1,68 +1,90 @@
-<script setup lang="ts">
+<script lang="ts">
 import { ref } from "vue";
 import { supabase } from "../helpers/supabase";
 
-const loading = ref(false);
-const email = ref("");
+export default {
+  data() {
+    return {
+      loading: ref(false),
+      email: ref(""),
+      linkSent: false,
+      errorMeesage: "",
+    };
+  },
 
-const handleLogin = async () => {
-  try {
-    loading.value = true;
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.value,
-    });
-    if (error) throw error;
-    alert("Check your email for the login link!");
-  } catch (error) {
-    if (error instanceof Error) {
-      alert(error.message);
-    }
-  } finally {
-    loading.value = false;
-  }
+  methods: {
+    async handleLogin() {
+      this.errorMeesage = "";
+      try {
+        this.loading = true;
+        const { error } = await supabase.auth.signInWithOtp({
+          email: this.email,
+        });
+        if (error) throw error;
+      } catch (error) {
+        if (error instanceof Error) {
+          this.errorMeesage = error.message;
+        }
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
 };
 </script>
 
 <template>
-  <main class="bg-gray-200 h-screen">
-    <div class="container mx-auto pt-40">
+  <main class="bg-zinc-900 h-screen">
+    <div class="max-w-xs mx-auto pt-40">
       <form
-        class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col max-w-3xl mx-auto"
+        v-if="!linkSent"
+        class="flex flex-col"
         @submit.prevent="handleLogin"
       >
-        <div class="mb-4">
-          <h1 class="font-semibold text-2xl text-gray-700">Welcome</h1>
-          <p class="font-normal text-normal text-gray-600 mt-1">
-            Sign in to your account via magic link with your email below
+        <div class="mb-10 text-center">
+          <h1 class="font-semibold text-2xl text-gray-100">
+            Welcome to Emoji-Dictionary
+          </h1>
+          <p class="font-normal text-normal text-stone-300 mt-1">
+            Enter your email to continue
           </p>
         </div>
 
         <div>
           <div class="mb-4">
-            <label
-              class="block text-gray-800 text-sm font-bold mb-2"
-              for="email"
-            >
-              Email
-            </label>
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3"
+              class="shadow appearance-none border rounded w-full py-2 px-3 bg-zinc-800 border-zinc-600 placeholder-stone-400"
               type="email"
-              placeholder="Your email"
-              id="email"
+              placeholder="Your Email Address..."
               v-model="email"
             />
           </div>
         </div>
-        <div class="flex items-center justify-between">
-          <input
-            type="submit"
-            class="bg-pink-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded hover:cursor-pointer disabled:cursor-not-allowed"
-            :value="loading ? 'Loading' : 'Send magic link'"
-            :disabled="loading"
-          />
-        </div>
+
+        <input
+          type="submit"
+          class="w-full bg-rose-600 hover:bg-blue-dark text-gray-200 font-bold py-2 px-4 rounded hover:cursor-pointer disabled:cursor-not-allowed"
+          :value="loading ? 'Loading' : 'Continue'"
+          :disabled="loading"
+        />
+
+        <p
+          v-if="errorMeesage"
+          class="mt-10 font-normal text-normal text-red-600"
+        >
+          Failed to send login link to email to {{ email }}
+        </p>
       </form>
+      <div v-else>
+        <div class="mb-10 text-center">
+          <h1 class="font-semibold text-2xl text-gray-100">
+            Verify your Email
+          </h1>
+          <p class="font-normal text-sm text-stone-300 mt-1">
+            We sent en email to <span class="text-rose-600">{{ email }}</span>
+          </p>
+        </div>
+      </div>
     </div>
   </main>
 </template>
