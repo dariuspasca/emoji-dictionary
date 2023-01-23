@@ -15,6 +15,9 @@ export default {
   methods: {
     async handleLogin() {
       this.errorMeesage = "";
+      this.email = "";
+      this.linkSent = false;
+
       try {
         this.loading = true;
         const { error } = await supabase.auth.signInWithOtp({
@@ -27,6 +30,7 @@ export default {
         }
       } finally {
         this.loading = false;
+        this.linkSent = true;
       }
     },
   },
@@ -53,7 +57,7 @@ export default {
         <div>
           <div class="mb-4">
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 bg-zinc-800 border-zinc-600 placeholder-stone-400"
+              class="shadow appearance-none border rounded w-full py-2 px-3 bg-zinc-800 border-zinc-600 placeholder-stone-400 text-gray-200"
               type="email"
               placeholder="Your Email Address..."
               v-model="email"
