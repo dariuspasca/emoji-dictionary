@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 import type { User } from "@supabase/gotrue-js";
 import { supabase } from "@/helpers/supabase";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 export const useAuthStore = defineStore("counter", () => {
   const user = ref<User | null>(null);
   const isLoading = ref(false);
+  const isLoggedIn = computed(() => !!user.value);
+
   const logIn = (newUser: User) => {
     if (!newUser) return;
     user.value = newUser;
@@ -46,5 +48,5 @@ export const useAuthStore = defineStore("counter", () => {
     }
   };
 
-  return { user, isLoading, logIn, logOut, sendMagicLink };
+  return { user, isLoading, logIn, logOut, isLoggedIn, sendMagicLink };
 });

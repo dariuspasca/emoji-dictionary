@@ -1,13 +1,22 @@
 <script lang="ts">
+import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/auth";
 
 export default {
   setup() {
     const authStore = useAuthStore();
+    const { user } = storeToRefs(authStore);
+    const { logOut } = authStore;
 
     return {
-      authStore,
+      user,
+      logOut,
     };
+  },
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    },
   },
 };
 </script>
@@ -17,8 +26,10 @@ export default {
     <div class="container mx-auto">
       <nav class="flex justify-between text-gray-100 py-4">
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/login" v-if="!authStore.user">Login</RouterLink>
-        <button v-else @click="authStore.logOut">Logout</button>
+        <RouterLink v-if="currentRouteName != 'login' && !user" to="/login"
+          >Login</RouterLink
+        >
+        <button v-if="user" @click="logOut">Logout</button>
       </nav>
     </div>
   </header>
