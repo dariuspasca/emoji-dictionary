@@ -1,37 +1,30 @@
 <script lang="ts">
 import { ref } from "vue";
-import { supabase } from "@/helpers/supabase";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/auth";
 
 export default {
-  data() {
+  setup() {
+    const authStore = useAuthStore();
+    const { isLoading } = storeToRefs(authStore);
+    const { sendMagicLink } = authStore;
     return {
-      loading: ref(false),
-      email: ref(""),
-      linkSentTo: "",
-      errorMeesage: "",
+      isLoading,
+      sendMagicLink,
     };
   },
 
+  data() {
+    return {
+      email: ref(""),
+      linkSentTo: "",
+    };
+  },
   methods: {
     async handleLogin() {
-      this.errorMeesage = "";
       this.linkSentTo = "";
-
-      try {
-        this.loading = true;
-        const { error } = await supabase.auth.signInWithOtp({
-          email: this.email,
-        });
-        if (error) throw error;
-      } catch (error) {
-        if (error instanceof Error) {
-          this.errorMeesage = error.message;
-        }
-      } finally {
-        this.loading = false;
-        this.linkSentTo = this.email;
-        this.email = "";
-      }
+      await this.sendMagicLink(this.email);
+      this.linkSentTo = this.email;
     },
   },
 };
@@ -68,16 +61,9 @@ export default {
         <input
           type="submit"
           class="w-full bg-rose-600 hover:bg-blue-dark text-gray-200 font-bold py-2 px-4 rounded hover:cursor-pointer disabled:cursor-not-allowed"
-          :value="loading ? 'Loading' : 'Continue'"
-          :disabled="loading"
+          :value="isLoading ? 'Loading' : 'Continue'"
+          :disabled="isLoading"
         />
-
-        <p
-          v-if="errorMeesage"
-          class="mt-10 font-normal text-normal text-red-600"
-        >
-          Failed to send login link to email to {{ linkSentTo }}
-        </p>
       </form>
       <div v-else>
         <div class="mb-10 text-center">
