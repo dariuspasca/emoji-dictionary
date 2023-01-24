@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.4.1",
+    "pinia": "^2.0.29",
     "vue": "^3.2.45",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

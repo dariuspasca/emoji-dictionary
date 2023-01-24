@@ -1,16 +1,42 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+<script lang="ts">
+import { ref } from "vue";
+import { supabase } from "@/helpers/supabase";
+import type { User } from "@supabase/gotrue-js";
+import { useAuthStore } from "@/store/auth";
+import NavigationHeader from "@/components/NavigationHeader.vue";
+
+export default {
+  name: "App",
+  components: {
+    NavigationHeader,
+  },
+  setup() {
+    const appReady = ref(false);
+    const authStore = useAuthStore();
+
+    // check to see if user is already logged in
+    const user = authStore.user;
+
+    // if user does not exist, make app ready
+    if (!user) {
+      appReady.value = true;
+    }
+
+    supabase.auth.onAuthStateChange((_, session) => {
+      if (session) {
+        authStore.logIn(session.user as User);
+      }
+
+      appReady.value = true;
+    });
+    return { appReady };
+  },
+};
 </script>
 
 <template>
-  <header class="bg-zinc-900">
-    <div class="container mx-auto">
-      <nav class="flex justify-between text-gray-100 py-4">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div v-if="appReady" class="bg-zinc-900 h-screen box-border">
+    <NavigationHeader />
+    <RouterView />
+  </div>
 </template>

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { ref } from "vue";
-import { supabase } from "../helpers/supabase";
+import { supabase } from "@/helpers/supabase";
 
 export default {
   data() {
