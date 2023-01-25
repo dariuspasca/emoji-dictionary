@@ -1,14 +1,16 @@
 <script lang="ts">
 import { PencilIcon } from "@heroicons/vue/24/solid";
+import Modal from "@/components/Modal.vue";
 
 export default {
-  components: { PencilIcon },
+  components: { PencilIcon, Modal },
   data() {
     return {
       dictionaries: [
         { name: "Foo", id: "123" },
         { name: "Bar", id: "345" },
       ],
+      showModal: false,
     };
   },
 };
@@ -22,6 +24,7 @@ export default {
         <button
           type="button"
           class="text-sm bg-rose-600 hover:bg-blue-dark text-gray-200 font-bold py-2 px-4 rounded hover:cursor-pointer disabled:cursor-not-allowed"
+          @click="showModal = true"
         >
           Add Dictionary
         </button>
@@ -48,5 +51,15 @@ export default {
         </ul>
       </section>
     </div>
+    <Teleport to="body">
+      <modal :show="showModal" @close="showModal = false">
+        <template #header>
+          <h3>custom header</h3>
+        </template>
+        <template #body>
+          <h3>custom body</h3>
+        </template>
+      </modal>
+    </Teleport>
   </main>
 </template>
