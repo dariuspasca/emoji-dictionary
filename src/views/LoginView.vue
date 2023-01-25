@@ -32,7 +32,7 @@ export default {
 
 <template>
   <main class="bg-zinc-900 h-screen">
-    <div class="max-w-xs mx-auto pt-40">
+    <div class="mx-8 md:max-w-xs md:mx-auto pt-40">
       <form
         v-if="!linkSentTo"
         class="flex flex-col"

@@ -13,11 +13,20 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
+      component: () => import("../views/LoginView.vue"),
       beforeEnter: () => {
         const authStore = useAuthStore();
         if (authStore.isLoggedIn) return "/";
       },
-      component: () => import("../views/LoginView.vue"),
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () => import("../views/DashboardView.vue"),
+      beforeEnter: () => {
+        const authStore = useAuthStore();
+        if (!authStore.isLoggedIn) return "/";
+      },
     },
   ],
 });

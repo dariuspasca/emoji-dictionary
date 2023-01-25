@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import type { User } from "@supabase/gotrue-js";
 import { supabase } from "@/helpers/supabase";
 import { computed, ref } from "vue";
+import router from "@/router";
 
 export const useAuthStore = defineStore("counter", () => {
   const user = ref<User | null>(null);
@@ -27,6 +28,7 @@ export const useAuthStore = defineStore("counter", () => {
     } finally {
       isLoading.value = true;
       user.value = null;
+      router.push("/");
     }
   };
 

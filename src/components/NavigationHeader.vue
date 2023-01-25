@@ -23,8 +23,8 @@ export default {
 
 <template>
   <header class="bg-zinc-900">
-    <div class="container mx-auto">
-      <nav class="flex justify-between text-gray-100 py-4">
+    <div class="flex mx-4 md:container md:mx-auto">
+      <nav class="flex justify-between text-gray-100 py-4 w-full md:mx-8">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink v-if="currentRouteName != 'login' && !user" to="/login"
           >Login</RouterLink
