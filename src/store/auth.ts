@@ -37,6 +37,7 @@ export const useAuthStore = defineStore("counter", () => {
       isLoading.value = true;
       const { error } = await supabase.auth.signInWithOtp({
         email,
+        options: { emailRedirectTo: "http://127.0.0.1:5173/dashboard" },
       });
       if (error) throw error;
     } catch (error) {

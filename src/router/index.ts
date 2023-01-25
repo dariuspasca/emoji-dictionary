@@ -9,26 +9,34 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
+      meta: { requiresAuth: false },
     },
     {
       path: "/login",
       name: "login",
+      meta: { requiresAuth: false },
       component: () => import("../views/LoginView.vue"),
-      beforeEnter: () => {
-        const authStore = useAuthStore();
-        if (authStore.isLoggedIn) return "/";
-      },
     },
     {
       path: "/dashboard",
       name: "dashboard",
       component: () => import("../views/DashboardView.vue"),
-      beforeEnter: () => {
-        const authStore = useAuthStore();
-        if (!authStore.isLoggedIn) return "/";
-      },
+      meta: { requiresAuth: true },
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+
+  if (to.path === "/login" && authStore.isLoggedIn) {
+    return next("/dashboard");
+  }
+
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+    return next("/login");
+  }
+  return next();
 });
 
 export default router;
