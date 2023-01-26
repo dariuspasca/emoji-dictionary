@@ -21,13 +21,13 @@ export default {
     <div class="flex flex-col mx-4 md:max-w-2xl lg:max-w-6xl md:mx-auto">
       <div class="flex justify-between">
         <h1 class="text-2xl">Dashboard</h1>
-        <button
-          type="button"
-          class="text-sm bg-rose-600 hover:bg-blue-dark text-gray-200 font-bold py-2 px-4 rounded hover:cursor-pointer disabled:cursor-not-allowed"
+        <RouterLink
+          to="/new-dictionary"
+          class="text-sm bg-indigo-500/[0.05] border-2 text-pink-500 border-pink-500 hover:text-purple-500 hover:border-purple-500 font-bold py-2 px-4 rounded hover:cursor-pointer disabled:cursor-not-allowed"
           @click="showModal = true"
         >
           Add Dictionary
-        </button>
+        </RouterLink>
       </div>
       <section class="my-8 bg-zinc-800 rounded-md">
         <p class="bg-zinc-900/[0.30] text-gray-200 py-2 px-4 rounded-t-md">

@@ -23,6 +23,12 @@ const router = createRouter({
       component: () => import("../views/DashboardView.vue"),
       meta: { requiresAuth: true },
     },
+    {
+      path: "/new-dictionary",
+      name: "create-dictionary",
+      component: () => import("../views/CreateDictionaryView.vue"),
+      meta: { requiresAuth: true },
+    },
   ],
 });
 
