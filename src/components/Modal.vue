@@ -11,12 +11,12 @@ export default {
   <Transition name="modal">
     <div
       v-if="show"
-      class="fixed top-0 left-0 w-full h-full flex z-50 bg-white/[0.05] transition-opacity"
+      class="fixed top-0 left-0 w-full h-full flex z-50 bg-zinc-900/[0.85] transition-opacity"
     >
       <div
-        class="transition-all m-auto bg-gray-100 w-[500px] px-6 py-4 rounded-md shadow-md shadow-zinc-500"
+        class="transition-all m-auto bg-zinc-800 w-10/12 md:w-[500px] px-6 py-4 rounded-md shadow-md shadow-purple-500/[0.55]"
       >
-        <div class="text-zinc-900">
+        <div class="text-white">
           <slot name="header">default header</slot>
         </div>
 
