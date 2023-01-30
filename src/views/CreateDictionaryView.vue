@@ -24,6 +24,9 @@ export default {
       this.words = [...this.words, newWord];
       this.hideModal();
     },
+    deleteWordFromDictionary(index: number) {
+      this.words.splice(index, 1);
+    },
   },
   computed: {
     getUniqueWords() {
@@ -109,7 +112,7 @@ export default {
               <span class="w-4/12"> {{ item.alternatives.join(",") }}</span>
               <button
                 class="flex text-xs text-zinc-400 hover:text-zinc-300 items-center gap-2 bg-zinc-700/[0.55] hover:bg-zinc-700/[0.65] rounded-md px-2"
-                @click="delete words[index]"
+                @click="deleteWordFromDictionary(index)"
               >
                 <TrashIcon class="h-3 w-3" /> Delete
               </button>

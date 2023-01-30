@@ -17,15 +17,11 @@ export default {
       word: ref(""),
       alternatives: ref(""),
       wordAlreadyExists: false,
-      containsSameWord: false,
     };
   },
   watch: {
     word(newVal) {
       this.wordAlreadyExists = this.uniqueWords?.includes(newVal);
-    },
-    alternatives(newVal) {
-      this.containsSameWord = this.word === newVal;
     },
   },
   methods: {
@@ -47,6 +43,9 @@ export default {
   computed: {
     isAddButtonDisabled() {
       return !this.word || this.wordAlreadyExists || !this.alternatives;
+    },
+    isAlternativeSameWord() {
+      return this.word === this.alternatives && this.alternatives !== "";
     },
   },
 };
@@ -91,7 +90,7 @@ export default {
             v-model="alternatives"
           />
         </div>
-        <p v-if="containsSameWord" class="text-pink-500 text-sm mt-2">
+        <p v-if="isAlternativeSameWord" class="text-pink-500 text-sm mt-2">
           Can't replace a word with the same word, what you say?
         </p>
       </template>
