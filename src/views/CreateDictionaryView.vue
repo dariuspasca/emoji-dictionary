@@ -1,19 +1,32 @@
 <script lang="ts">
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { TrashIcon } from "@heroicons/vue/24/solid";
 import AddWord from "@/components/AddWord.vue";
 import type DictionaryWord from "@/models/DictionaryWord";
+import type DictionaryPage from "@/models/DictionaryPage";
+import type SupabaseError from "@/models/SupabaseError";
+import { supabase } from "@/helpers/supabase";
+import { useAuthStore } from "@/store/auth";
 
 export default {
   components: { AddWord, TrashIcon },
+  setup() {
+    const authStore = useAuthStore();
+    const { user } = storeToRefs(authStore);
+    return {
+      user,
+    };
+  },
   data() {
     return {
       name: ref(""),
       title: ref(""),
       description: ref(""),
-      isLoading: false,
-      showModal: false,
       words: new Array<DictionaryWord>(),
+      isLoading: false,
+      notAvailablePageNames: new Array<string>(),
+      showModal: false,
     };
   },
   methods: {
@@ -27,10 +40,45 @@ export default {
     deleteWordFromDictionary(index: number) {
       this.words.splice(index, 1);
     },
+    async createDictionary() {
+      try {
+        this.isLoading = true;
+
+        const payload: DictionaryPage = {
+          user_id: this.user!.id,
+          name: this.name,
+          title: this.title,
+          description: this.description,
+          entries: this.words,
+        };
+
+        const { data, error } = await supabase
+          .from("dictionary")
+          .insert(payload);
+
+        if (error) throw error;
+      } catch (error) {
+        const err = error as SupabaseError;
+        if (err.code === "23505") {
+          this.notAvailablePageNames = [
+            ...this.notAvailablePageNames,
+            this.name,
+          ];
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
   computed: {
-    getUniqueWords() {
+    uniqueWords() {
       return this.words.map(({ word }) => word);
+    },
+    isPageNameUnique() {
+      if (!this.notAvailablePageNames.length) {
+        return true;
+      }
+      return !this.notAvailablePageNames.includes(this.name);
     },
   },
   watch: {
@@ -44,7 +92,10 @@ export default {
 <template>
   <main class="bg-zinc-900">
     <div class="mx-8 md:max-w-3xl md:mx-auto pt-10 md:pt-40">
-      <form class="flex flex-col pb-8 md:pb-0">
+      <form
+        class="flex flex-col pb-8 md:pb-0"
+        @submit.prevent="createDictionary"
+      >
         <h1
           class="text-5xl mb-10 font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"
         >
@@ -65,9 +116,12 @@ export default {
               class="shadow flex-grow appearance-none border rounded py-2 px-3 bg-zinc-800 border-zinc-600 placeholder-stone-400 text-gray-200"
               type="text"
               placeholder="Give an unique name to your dictionary"
-              v-model="name"
+              v-model.trim="name"
             />
           </div>
+          <p v-if="!isPageNameUnique" class="text-pink-500 text-sm mt-2">
+            Ops, there is already a dictionary with this name
+          </p>
         </section>
 
         <section class="py-4 md:py-10">
@@ -137,7 +191,7 @@ export default {
     </div>
     <AddWord
       :show="showModal"
-      :uniqueWords="getUniqueWords"
+      :uniqueWords="uniqueWords"
       @closeModal="showModal = false"
       @newWord="addWordToDictionary"
     />
