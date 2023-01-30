@@ -24,7 +24,7 @@ export default {
           <slot name="body">default body</slot>
         </div>
 
-        <div class="my-4">
+        <div class="mt-4">
           <slot name="footer">
             default footer
             <button class="float-right" @click="$emit('close')">OK</button>
