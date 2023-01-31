@@ -1,15 +1,24 @@
 <script lang="ts">
-import { PencilIcon } from "@heroicons/vue/24/solid";
+import { PencilIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import { useProfileStore } from "@/store/dictionary";
+import { storeToRefs } from "pinia";
 
 export default {
-  components: { PencilIcon },
-  data() {
+  components: { PencilIcon, TrashIcon },
+  setup() {
+    const profileStore = useProfileStore();
+    const { isLoading, dictionaries } = storeToRefs(profileStore);
+    const { getDictionaries, editDictionary, deleteDictionary } = profileStore;
     return {
-      dictionaries: [
-        { name: "Foo", id: "123" },
-        { name: "Bar", id: "345" },
-      ],
+      dictionaries,
+      isLoading,
+      getDictionaries,
+      editDictionary,
+      deleteDictionary,
     };
+  },
+  mounted() {
+    this.getDictionaries();
   },
 };
 </script>
@@ -33,17 +42,26 @@ export default {
         <ul>
           <li
             class="flex justify-between px-4 py-2 text-gray-200 hover:bg-zinc-700/[0.25]"
-            v-for="item in dictionaries"
-            :key="item.id"
+            v-for="dictionary in dictionaries"
+            :key="dictionary.id"
           >
             <span class="hover:cursor-pointer hover:underline">
-              {{ item.name }}</span
+              {{ dictionary.name }}</span
             >
-            <button
-              class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-zinc-300"
-            >
-              <PencilIcon class="h-3 w-3" /> Edit
-            </button>
+            <div class="flex gap-2">
+              <button
+                class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-zinc-300"
+                @click="editDictionary(dictionary.name)"
+              >
+                <PencilIcon class="h-3 w-3" /> Edit
+              </button>
+              <button
+                class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-pink-500"
+                @click="deleteDictionary(dictionary.id)"
+              >
+                <TrashIcon class="h-3 w-3" /> Delete
+              </button>
+            </div>
           </li>
         </ul>
       </section>

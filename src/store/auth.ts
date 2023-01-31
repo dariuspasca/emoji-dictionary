@@ -4,7 +4,7 @@ import { supabase } from "@/helpers/supabase";
 import { computed, ref } from "vue";
 import router from "@/router";
 
-export const useAuthStore = defineStore("counter", () => {
+export const useAuthStore = defineStore("user", () => {
   const user = ref<User | null>(null);
   const isLoading = ref(false);
   const isLoggedIn = computed(() => !!user.value);

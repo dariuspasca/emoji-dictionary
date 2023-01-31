@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import Modal from "@/components/Modal.vue";
-import type DictionaryWord from "@/models/DictionaryWord";
+import type { DictionaryWord } from "@/models/DictionaryPage";
 
 export default {
   id: "AddWord",

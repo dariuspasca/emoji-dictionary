@@ -1,11 +1,18 @@
-import type DictionaryWord from "./DictionaryWord";
+interface DictionaryWord {
+  word: string;
+  alternatives: Array<string>;
+}
 
-interface DictionaryPage {
-  user_id: string;
+interface Dictionary {
   name: string;
   title: string;
   description: string;
   entries: Array<DictionaryWord> | string;
 }
 
-export default DictionaryPage;
+interface DictionaryPage extends Dictionary {
+  id: string;
+  user_id: string;
+}
+
+export type { Dictionary, DictionaryWord, DictionaryPage };

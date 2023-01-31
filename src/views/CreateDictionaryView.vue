@@ -1,21 +1,21 @@
 <script lang="ts">
 import { ref } from "vue";
+import { useProfileStore } from "@/store/dictionary";
 import { storeToRefs } from "pinia";
 import { TrashIcon } from "@heroicons/vue/24/solid";
 import AddWord from "@/components/AddWord.vue";
-import type DictionaryWord from "@/models/DictionaryWord";
-import type DictionaryPage from "@/models/DictionaryPage";
-import type SupabaseError from "@/models/SupabaseError";
-import { supabase } from "@/helpers/supabase";
-import { useAuthStore } from "@/store/auth";
+import type { Dictionary, DictionaryWord } from "@/models/DictionaryPage";
 
 export default {
   components: { AddWord, TrashIcon },
   setup() {
-    const authStore = useAuthStore();
-    const { user } = storeToRefs(authStore);
+    const profileStore = useProfileStore();
+    const { isLoading, notAvailablePageNames } = storeToRefs(profileStore);
+    const { createDictionary } = profileStore;
     return {
-      user,
+      isLoading,
+      notAvailablePageNames,
+      createDictionary,
     };
   },
   data() {
@@ -24,8 +24,6 @@ export default {
       title: ref(""),
       description: ref(""),
       words: new Array<DictionaryWord>(),
-      isLoading: false,
-      notAvailablePageNames: new Array<string>(),
       showModal: false,
     };
   },
@@ -40,34 +38,15 @@ export default {
     deleteWordFromDictionary(index: number) {
       this.words.splice(index, 1);
     },
-    async createDictionary() {
-      try {
-        this.isLoading = true;
+    submit() {
+      const payload: Dictionary = {
+        name: this.name,
+        title: this.title,
+        description: this.description,
+        entries: this.words,
+      };
 
-        const payload: DictionaryPage = {
-          user_id: this.user!.id,
-          name: this.name,
-          title: this.title,
-          description: this.description,
-          entries: this.words,
-        };
-
-        const { data, error } = await supabase
-          .from("dictionary")
-          .insert(payload);
-
-        if (error) throw error;
-      } catch (error) {
-        const err = error as SupabaseError;
-        if (err.code === "23505") {
-          this.notAvailablePageNames = [
-            ...this.notAvailablePageNames,
-            this.name,
-          ];
-        }
-      } finally {
-        this.isLoading = false;
-      }
+      this.createDictionary(payload);
     },
   },
   computed: {
@@ -91,11 +70,8 @@ export default {
 
 <template>
   <main class="bg-zinc-900">
-    <div class="mx-8 pt-10 md:mx-auto md:max-w-3xl md:pt-40">
-      <form
-        class="flex flex-col pb-8 md:pb-0"
-        @submit.prevent="createDictionary"
-      >
+    <div class="mx-8 pt-10 md:mx-auto md:max-w-2xl md:pt-40 lg:max-w-3xl">
+      <form class="flex flex-col pb-8 md:pb-0" @submit.prevent="submit">
         <h1
           class="mb-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-5xl font-extrabold text-transparent"
         >
@@ -115,6 +91,8 @@ export default {
             <input
               class="flex-grow appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400 shadow"
               type="text"
+              minlength="3"
+              required
               placeholder="Give an unique name to your dictionary"
               v-model.trim="name"
             />
