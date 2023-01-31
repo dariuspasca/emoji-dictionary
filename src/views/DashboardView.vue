@@ -15,19 +15,19 @@ export default {
 </script>
 
 <template>
-  <main class="bg-zinc-900 text-gray-100 text-left py-10">
-    <div class="flex flex-col mx-4 md:max-w-2xl lg:max-w-6xl md:mx-auto">
+  <main class="bg-zinc-900 py-10 text-left text-gray-100">
+    <div class="mx-4 flex flex-col md:mx-auto md:max-w-2xl lg:max-w-6xl">
       <div class="flex justify-between">
         <h1 class="text-2xl">Dashboard</h1>
         <RouterLink
           to="/new-dictionary"
-          class="text-sm bg-indigo-500/[0.05] border-2 text-pink-500 border-pink-500 hover:text-purple-500 hover:border-purple-500 font-bold py-2 px-4 rounded hover:cursor-pointer disabled:cursor-not-allowed"
+          class="rounded border-2 border-pink-500 bg-indigo-500/[0.05] py-2 px-4 text-sm font-bold text-pink-500 hover:cursor-pointer hover:border-purple-500 hover:text-purple-500 disabled:cursor-not-allowed"
         >
           Add Dictionary
         </RouterLink>
       </div>
-      <section class="my-8 bg-zinc-800 rounded-md">
-        <p class="bg-zinc-900/[0.30] text-gray-200 py-2 px-4 rounded-t-md">
+      <section class="my-8 rounded-md bg-zinc-800">
+        <p class="rounded-t-md bg-zinc-900/[0.30] py-2 px-4 text-gray-200">
           Dictionaries
         </p>
         <ul>
@@ -36,11 +36,11 @@ export default {
             v-for="item in dictionaries"
             :key="item.id"
           >
-            <span class="hover:underline hover:cursor-pointer">
+            <span class="hover:cursor-pointer hover:underline">
               {{ item.name }}</span
             >
             <button
-              class="flex text-xs text-zinc-400 hover:text-zinc-300 items-center gap-2 bg-zinc-700/[0.55] hover:bg-zinc-700/[0.65] rounded-md px-2"
+              class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-zinc-300"
             >
               <PencilIcon class="h-3 w-3" /> Edit
             </button>

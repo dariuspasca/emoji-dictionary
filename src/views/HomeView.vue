@@ -14,7 +14,7 @@ export default {
 </script>
 
 <template>
-  <main class="bg-zinc-900 text-gray-100 text-center py-10">
+  <main class="bg-zinc-900 py-10 text-center text-gray-100">
     <h1 v-if="user" class="text-3xl">Welcome back {{ user.email }} !</h1>
     <h1 v-else class="text-3xl">Home!</h1>
   </main>

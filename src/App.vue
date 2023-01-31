@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-  <div v-if="appReady" class="bg-zinc-900 h-screen box-border">
+  <div v-if="appReady" class="box-border h-screen bg-zinc-900">
     <NavigationHeader />
     <RouterView />
   </div>
