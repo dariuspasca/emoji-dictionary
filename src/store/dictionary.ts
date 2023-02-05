@@ -16,7 +16,10 @@ export const useProfileStore = defineStore("profile", () => {
   const getDictionaries = async () => {
     try {
       isLoading.value = true;
-      const { data, error } = await supabase.from("dictionary").select("*");
+      const { data, error } = await supabase
+        .from("dictionary")
+        .select("*")
+        .eq("user_id", user.value?.id);
       if (error) throw error;
       if (data) {
         dictionaries.value = data;
