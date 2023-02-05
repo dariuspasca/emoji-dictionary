@@ -70,8 +70,8 @@ export default {
 
 <template>
   <main class="bg-zinc-900">
-    <div class="mx-8 pt-10 md:mx-auto md:max-w-2xl md:pt-40 lg:max-w-3xl">
-      <form class="flex flex-col pb-8 md:pb-0" @submit.prevent="submit">
+    <div class="mx-8 pt-10 md:mx-auto md:max-w-2xl lg:max-w-3xl">
+      <form class="flex flex-col pb-8" @submit.prevent="submit">
         <h1
           class="mb-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-5xl font-extrabold text-transparent"
         >
