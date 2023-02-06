@@ -45,9 +45,13 @@ export default {
             v-for="dictionary in dictionaries"
             :key="dictionary.id"
           >
-            <span class="hover:cursor-pointer hover:underline">
-              {{ dictionary.name }}</span
+            <RouterLink
+              class="hover:cursor-pointer hover:underline"
+              :to="'/dictionary/' + dictionary.name"
             >
+              {{ dictionary.name }}</RouterLink
+            >
+
             <div class="flex gap-2">
               <button
                 class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-zinc-300"
