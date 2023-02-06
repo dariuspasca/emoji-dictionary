@@ -21,7 +21,7 @@ export const useProfileStore = defineStore("profile", () => {
         .select("*")
         .eq("user_id", user.value?.id);
       if (error) throw error;
-      if (data) {
+      if (data.length) {
         dictionaries.value = data.map((dictionary) => ({
           ...dictionary,
           entries: JSON.parse(dictionary.entries),
@@ -50,7 +50,7 @@ export const useProfileStore = defineStore("profile", () => {
         .select();
 
       if (error) throw error;
-      if (data) {
+      if (data.length) {
         dictionaries.value = data;
         router.push(`/dashboard`);
       }
@@ -81,7 +81,7 @@ export const useProfileStore = defineStore("profile", () => {
         .select();
 
       if (error) throw error;
-      if (data) {
+      if (data.length) {
         const updatedDictionary = data[0] as DictionaryPage;
         dictionaries.value = dictionaries.value!.map((dictionary) =>
           dictionary.id === updatedDictionary.id
