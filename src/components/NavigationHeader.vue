@@ -25,7 +25,8 @@ export default {
   <header class="bg-zinc-900">
     <div class="mx-4 flex md:container md:mx-auto">
       <nav class="flex w-full justify-between py-4 text-gray-100 md:mx-8">
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/dashboard" v-if="user">Dashboard</RouterLink>
+        <RouterLink to="/" v-else>Home</RouterLink>
         <RouterLink v-if="currentRouteName != 'login' && !user" to="/login"
           >Login</RouterLink
         >
