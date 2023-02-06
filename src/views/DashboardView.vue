@@ -1,6 +1,6 @@
 <script lang="ts">
 import { PencilIcon, TrashIcon } from "@heroicons/vue/24/solid";
-import { useProfileStore } from "@/store/dictionary";
+import { useProfileStore } from "@/store/profile";
 import { storeToRefs } from "pinia";
 
 export default {

@@ -9,7 +9,7 @@ import router from "@/router";
 export const useProfileStore = defineStore("profile", () => {
   const authStore = useAuthStore();
   const { user } = storeToRefs(authStore);
-  const dictionaries = ref(new Array<DictionaryPage>());
+  const dictionaries = ref<Array<DictionaryPage> | null>(null);
   const notAvailablePageNames = ref(new Array<string>());
   const isLoading = ref(false);
 
@@ -22,7 +22,10 @@ export const useProfileStore = defineStore("profile", () => {
         .eq("user_id", user.value?.id);
       if (error) throw error;
       if (data) {
-        dictionaries.value = data;
+        dictionaries.value = data.map((dictionary) => ({
+          ...dictionary,
+          entries: JSON.parse(dictionary.entries),
+        }));
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -39,7 +42,11 @@ export const useProfileStore = defineStore("profile", () => {
     try {
       const { data, error } = await supabase
         .from("dictionary")
-        .insert({ user_id: user.value?.id, ...newDictionary })
+        .insert({
+          ...newDictionary,
+          user_id: user.value?.id,
+          entries: JSON.stringify(newDictionary.entries),
+        })
         .select();
 
       if (error) throw error;
@@ -62,10 +69,46 @@ export const useProfileStore = defineStore("profile", () => {
     }
   };
 
+  const updateDictionary = async (updateDictionary: Dictionary) => {
+    try {
+      const { data, error } = await supabase
+        .from("dictionary")
+        .update({
+          ...updateDictionary,
+          entries: JSON.stringify(updateDictionary.entries),
+        })
+        .eq("user_id", user.value?.id)
+        .select();
+
+      if (error) throw error;
+      if (data) {
+        const updatedDictionary = data[0] as DictionaryPage;
+        dictionaries.value = dictionaries.value!.map((dictionary) =>
+          dictionary.id === updatedDictionary.id
+            ? { ...updatedDictionary }
+            : dictionary
+        );
+        router.push(`/dashboard`);
+      }
+    } catch (error) {
+      const err = error as SupabaseError;
+      if (err.code === "23505") {
+        notAvailablePageNames.value = [
+          ...notAvailablePageNames.value,
+          updateDictionary.name,
+        ];
+      } else if (err.code === "23514") {
+        console.log("name too short");
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   const deleteDictionary = async (id: string) => {
     const tempDictionary = dictionaries.value;
     try {
-      dictionaries.value = dictionaries.value.filter(
+      dictionaries.value = dictionaries.value!.filter(
         (dictionary) => dictionary.id !== id
       );
       const { error } = await supabase.from("dictionary").delete().eq("id", id);
@@ -93,6 +136,7 @@ export const useProfileStore = defineStore("profile", () => {
     notAvailablePageNames,
     getDictionaries,
     createDictionary,
+    updateDictionary,
     editDictionary,
     deleteDictionary,
   };

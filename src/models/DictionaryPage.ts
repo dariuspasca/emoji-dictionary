@@ -7,7 +7,7 @@ interface Dictionary {
   name: string;
   title: string;
   description: string;
-  entries: Array<DictionaryWord> | string;
+  entries: Array<DictionaryWord>;
 }
 
 interface DictionaryPage extends Dictionary {
