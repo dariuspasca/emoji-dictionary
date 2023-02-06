@@ -1,29 +1,44 @@
 <script lang="ts">
-import { useProfileStore } from "@/store/profile";
-import { storeToRefs } from "pinia";
+import { supabase } from "@/helpers/supabase";
+import type { DictionaryPage } from "@/models/DictionaryPage";
 
 export default {
-  setup() {
-    const profileStore = useProfileStore();
-    const { isLoading, dictionaries } = storeToRefs(profileStore);
-    const { getDictionaries } = profileStore;
-
+  data() {
     return {
-      isLoading,
-      dictionaries,
-      getDictionaries,
+      dictionary: {} as DictionaryPage,
+      isLoading: false,
+      notFound: false,
     };
   },
-  computed: {
-    dictionary() {
-      return this.dictionaries?.find(
-        (dictionary) => dictionary.name === this.$route.params.name
-      );
+  methods: {
+    async getDictionary(name: string) {
+      try {
+        this.isLoading = true;
+        const { data, error } = await supabase
+          .from("dictionary")
+          .select("*")
+          .eq("name", name);
+        if (error) throw error;
+        if (data.length) {
+          this.dictionary = data as unknown as DictionaryPage;
+        } else {
+          this.notFound = true;
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        } else {
+          console.log("Unexpected error", error);
+        }
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
   mounted() {
-    if (!this.dictionaries) {
-      this.getDictionaries();
+    const name = this.$route.params.name;
+    if (typeof name === "string") {
+      this.getDictionary(name);
     }
   },
 };
@@ -31,6 +46,8 @@ export default {
 
 <template>
   <main class="bg-zinc-900 py-10 text-left text-gray-100">
-    <div>Dictionary</div>
+    <div v-if="isLoading">Loading</div>
+    <div v-else-if="notFound">Not found</div>
+    <div v-else>Dictionary</div>
   </main>
 </template>
