@@ -14,8 +14,15 @@ export default {
 </script>
 
 <template>
-  <main class="bg-zinc-900 py-10 text-center text-gray-100">
-    <h1 v-if="user" class="text-3xl">Welcome back {{ user.email }} !</h1>
-    <h1 v-else class="text-3xl">Home!</h1>
+  <main class="flex min-h-screen flex-col items-center justify-center p-10">
+    <div class="z-10 w-full max-w-screen-sm">
+      <div>
+        <h1
+          class="text-center text-4xl font-extrabold tracking-tight text-slate-400 sm:text-5xl lg:text-6xl"
+        >
+          Emojii-Dictionary
+        </h1>
+      </div>
+    </div>
   </main>
 </template>
