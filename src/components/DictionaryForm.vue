@@ -39,12 +39,9 @@ export default {
     };
   },
   methods: {
-    hideModal() {
-      this.showModal = false;
-    },
     addWordToDictionary(newWord: DictionaryWord) {
       this.words = [...this.words, newWord];
-      this.hideModal();
+      this.showModal = false;
     },
     deleteWordFromDictionary(index: number) {
       this.words.splice(index, 1);
