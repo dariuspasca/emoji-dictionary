@@ -1,10 +1,13 @@
 <script lang="ts">
 import { ref } from "vue";
 import { supabase } from "@/helpers/supabase";
+import { DocumentIcon } from "@heroicons/vue/24/solid";
 import type { DictionaryPage } from "@/models/DictionaryPage";
+import DictionaryDetails from "@/components/DictionaryDetails.vue";
 import generateText from "@/helpers/generateText";
 
 export default {
+  components: { DocumentIcon, DictionaryDetails },
   data() {
     return {
       dictionary: {} as DictionaryPage,
@@ -14,6 +17,7 @@ export default {
         "The quick brown fox jumps over the lazy dog. If the dog reacted, was it really lazy?"
       ),
       textReplaced: "",
+      showModal: false,
     };
   },
   methods: {
@@ -65,7 +69,7 @@ export default {
     <div v-else-if="notFound">Not found</div>
     <div
       v-else
-      class="mx-8 flex flex-col items-start gap-2 md:mx-auto md:max-w-xl md:pt-20"
+      class="relative mx-8 flex flex-col items-start gap-2 md:mx-auto md:max-w-xl md:pt-20"
     >
       <h1
         class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-5xl font-extrabold text-transparent"
@@ -75,10 +79,19 @@ export default {
       <h2 class="mb-4 text-xl font-medium text-gray-300">
         {{ dictionary.description }}
       </h2>
+      <button
+        class="absolute top-0 right-0 flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8] md:top-20"
+        type="button"
+        @click="showModal = true"
+      >
+        <DocumentIcon class="h-3 w-3" />Dictionary
+      </button>
 
       <section class="flex w-full flex-col gap-3">
-        <label for="textToReplace" class="mb-2 text-gray-200 md:mb-0 md:w-64"
-          >Tell us your story:</label
+        <label
+          for="textToReplace"
+          class="text-slate-302 mb-2 text-lg text-slate-200 md:mb-0 md:w-64"
+          >Insert us your text</label
         >
         <textarea
           v-model="textToReplace"
@@ -96,11 +109,19 @@ export default {
         Generate
       </button>
       <section class="flex w-full flex-col gap-3">
-        <p v-if="textReplaced" class="mb-2 text-gray-200 md:mb-0 md:w-64">
-          Your new story
-        </p>
+        <h2
+          v-if="textReplaced"
+          class="text-slate-302 mb-2 text-lg text-slate-200 md:mb-0 md:w-64"
+        >
+          Your new text
+        </h2>
         <div v-html="textReplaced" />
       </section>
     </div>
   </main>
+  <DictionaryDetails
+    :show="showModal"
+    :entries="dictionary.entries"
+    @closeModal="showModal = false"
+  />
 </template>
