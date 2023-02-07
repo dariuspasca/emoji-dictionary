@@ -172,7 +172,9 @@ export default {
               :key="item.word"
             >
               <span class="w-4/12"> {{ item.word }}</span>
-
+              <span class="w-4/12 text-purple-500">
+                {{ item.alternatives.join(",") }}</span
+              >
               <button
                 class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-zinc-300"
                 @click="deleteWordFromDictionary(index)"
