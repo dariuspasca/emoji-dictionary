@@ -19,10 +19,10 @@ export default {
 
 <template>
   <main class="h-screen bg-zinc-900">
-    <AuthUser :is-loading="isLoading" :auth-fn="sendMagicLink" />
+    <AuthUser is-registering :is-loading="isLoading" :auth-fn="sendMagicLink" />
     <div class="mt-5 text-center text-sm text-slate-300">
-      <span>No account? </span>
-      <RouterLink class="font-bold" to="/register">Create one</RouterLink>
+      <span>Have an account? </span>
+      <RouterLink class="font-bold" to="/login">Login</RouterLink>
     </div>
   </main>
 </template>
