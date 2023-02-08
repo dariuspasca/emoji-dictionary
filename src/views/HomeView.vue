@@ -60,6 +60,13 @@ export default {
         >
       </div>
     </Transition>
+
+    <RouterLink
+      class="mt-2 rounded border-2 border-purple-500 bg-indigo-500/[0.05] py-2 px-4 font-bold text-purple-500 hover:cursor-pointer hover:border-pink-500 hover:text-pink-500 disabled:cursor-not-allowed"
+      v-if="!user"
+      to="/register"
+      >Get Started</RouterLink
+    >
   </main>
 </template>
 
