@@ -53,6 +53,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
+  if (to.path === "/") {
+    return next("/dashboard");
+  }
+
   if ((to.path === "/login" || to.path === "/") && authStore.isLoggedIn) {
     return next("/dashboard");
   }
