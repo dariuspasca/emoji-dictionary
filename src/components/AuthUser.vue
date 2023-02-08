@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 export default {
   id: "AuthUser",
-
+  emits: ["onComplete"],
   props: {
     isRegistering: Boolean,
     authFn: { type: Function, required: true },
@@ -20,6 +20,7 @@ export default {
       this.linkSentTo = "";
       await this.authFn(this.email);
       this.linkSentTo = this.email;
+      this.$emit("onComplete");
     },
   },
 };
