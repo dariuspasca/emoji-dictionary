@@ -13,9 +13,7 @@ export default {
       dictionary: {} as DictionaryPage,
       isLoading: false,
       notFound: false,
-      textToReplace: ref(
-        "The quick brown fox jumps over the lazy dog. If the dog reacted, was it really lazy?"
-      ),
+      textToReplace: ref(""),
       textReplaced: "",
       showModal: false,
     };
@@ -65,8 +63,8 @@ export default {
 
 <template>
   <main class="bg-zinc-900 py-10 text-left text-gray-100">
-    <div v-if="isLoading">Loading</div>
-    <div v-else-if="notFound">Not found</div>
+    <div v-if="isLoading" class="mt-6 text-center text-lg">Loading ...</div>
+    <div v-else-if="notFound" class="mt-6 text-center text-lg">Not found</div>
     <div
       v-else
       class="relative mx-8 flex flex-col items-start gap-2 md:mx-auto md:max-w-xl md:pt-20"
