@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template>
-  <main class="h-screen bg-zinc-900">
+  <main class="bg-zinc-900">
     <AuthUser
       is-registering
       :is-loading="isLoading"
