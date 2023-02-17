@@ -53,12 +53,12 @@ export default {
             >
 
             <div class="flex gap-2">
-              <button
+              <RouterLink
+                :to="'/edit-dictionary/' + dictionary.name"
                 class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-zinc-300"
-                @click="editDictionary(dictionary.name)"
               >
                 <PencilIcon class="h-3 w-3" /> Edit
-              </button>
+              </RouterLink>
               <button
                 class="flex items-center gap-2 rounded-md bg-zinc-700/[0.55] px-2 text-xs text-zinc-400 hover:bg-zinc-700/[0.65] hover:text-pink-500"
                 @click="deleteDictionary(dictionary.id)"
