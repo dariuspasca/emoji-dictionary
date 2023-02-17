@@ -54,8 +54,12 @@ export default {
   },
   mounted() {
     const name = this.$route.params.name;
+    const share = this.$route.query.share;
     if (typeof name === "string") {
       this.getDictionary(name);
+    }
+    if (typeof share === "string") {
+      this.textToReplace = share.replace("-", " ");
     }
   },
 };
@@ -78,7 +82,7 @@ export default {
         {{ dictionary.description }}
       </h2>
       <button
-        class="absolute top-0 right-0 flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8] md:top-20"
+        class="absolute right-0 -top-8 flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8] md:top-10"
         type="button"
         @click="showModal = true"
       >
@@ -88,8 +92,8 @@ export default {
       <section class="flex w-full flex-col gap-3">
         <label
           for="textToReplace"
-          class="text-slate-302 mb-2 text-lg text-slate-200 md:mb-0 md:w-64"
-          >Insert us your text</label
+          class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
+          >Insert your text</label
         >
         <textarea
           v-model="textToReplace"
@@ -101,7 +105,7 @@ export default {
       </section>
       <button
         type="button"
-        class="mx-auto my-20 w-full rounded border-2 border-pink-500 bg-indigo-500/[0.05] py-2 px-4 font-bold text-pink-500 hover:cursor-pointer hover:border-purple-500 hover:text-purple-500 disabled:cursor-not-allowed"
+        class="my-5 mx-auto w-full rounded border-2 border-pink-500 bg-indigo-500/[0.05] py-2 px-4 font-bold text-pink-500 hover:cursor-pointer hover:border-purple-500 hover:text-purple-500 disabled:cursor-not-allowed lg:my-20"
         @click="replaceText"
       >
         Generate
@@ -109,7 +113,7 @@ export default {
       <section class="flex w-full flex-col gap-3">
         <h2
           v-if="textReplaced"
-          class="text-slate-302 mb-2 text-lg text-slate-200 md:mb-0 md:w-64"
+          class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
         >
           Your new text
         </h2>
