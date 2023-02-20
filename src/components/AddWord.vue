@@ -1,12 +1,13 @@
 <script lang="ts">
 import { ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
+import CustomInput from "./CustomInput.vue";
 import Modal from "@/components/Modal.vue";
 import type { DictionaryWord } from "@/models/DictionaryPage";
 
 export default {
   id: "AddWord",
-  components: { Modal, XMarkIcon },
+  components: { Modal, XMarkIcon, CustomInput },
   emits: ["newWord", "closeModal"],
   props: {
     show: Boolean,
@@ -39,6 +40,12 @@ export default {
       this.alternatives = "";
       this.wordAlreadyExists = false;
     },
+    onChangeText(new_text: string | undefined) {
+      this.word = new_text || "";
+    },
+    onChangeAlternatives(new_text: string | undefined) {
+      this.alternatives = new_text || "";
+    },
   },
   computed: {
     isAddButtonDisabled() {
@@ -69,11 +76,9 @@ export default {
           <label for="name" class="font-medium text-stone-100 md:w-2/12"
             >Word</label
           >
-          <input
-            class="flex-grow appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400 shadow"
-            type="text"
-            placeholder="Your emojii/word"
-            v-model="word"
+          <CustomInput
+            :input-props="{ type: 'text', placeholder: 'Your emoji' }"
+            @update="onChangeText"
           />
         </div>
         <p v-if="wordAlreadyExists" class="mt-2 mb-6 text-sm text-pink-500">
@@ -83,11 +88,9 @@ export default {
           <label for="name" class="font-medium text-stone-100 md:w-2/12"
             >Replace</label
           >
-          <input
-            class="flex-grow appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400 shadow"
-            type="text"
-            placeholder="Replace with"
-            v-model="alternatives"
+          <CustomInput
+            :input-props="{ type: 'text', placeholder: 'Replace with' }"
+            @update="onChangeText"
           />
         </div>
         <p v-if="isAlternativeSameWord" class="mt-2 text-sm text-pink-500">
