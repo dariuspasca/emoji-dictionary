@@ -31,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <main class="bg-zinc-900 py-10 text-left text-gray-100">
+  <main class="bg-zinc-900 text-left text-gray-100">
     <div v-if="dictionary">
       <DictionaryForm :dictionary="dictionary" is-edit-mode />
     </div>

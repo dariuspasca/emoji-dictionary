@@ -1,20 +1,22 @@
 <script lang="ts">
 import { ref } from "vue";
 import { supabase } from "@/helpers/supabase";
-import { DocumentIcon } from "@heroicons/vue/24/solid";
+import { DocumentIcon, ClipboardDocumentIcon } from "@heroicons/vue/24/solid";
+import { notify } from "@/helpers/notiwind";
 import type { DictionaryPage } from "@/models/DictionaryPage";
 import DictionaryDetails from "@/components/DictionaryDetails.vue";
 import generateText from "@/helpers/generateText";
 import router from "@/router";
 
 export default {
-  components: { DocumentIcon, DictionaryDetails },
+  components: { DocumentIcon, DictionaryDetails, ClipboardDocumentIcon },
   data() {
     return {
       dictionary: {} as DictionaryPage,
       isLoading: false,
       textToReplace: ref(""),
       textReplaced: "",
+      textReplacedRaw: "",
       showModal: false,
     };
   },
@@ -46,9 +48,37 @@ export default {
       }
     },
     replaceText() {
-      this.textReplaced = generateText(
+      const { rawText, formattedText } = generateText(
         this.textToReplace,
         this.dictionary.entries
+      );
+      this.textReplacedRaw = rawText;
+      this.textReplaced = formattedText;
+    },
+    copyToClipboard() {
+      navigator.clipboard.writeText(this.textReplacedRaw).then(
+        () => {
+          notify(
+            {
+              group: "bottom",
+              title: "Success",
+              text: "Text copied",
+              type: "success",
+            },
+            2000
+          );
+        },
+        () => {
+          notify(
+            {
+              group: "bottom",
+              title: "Error",
+              text: "Ops, can't copy text",
+              type: "error",
+            },
+            2000
+          );
+        }
       );
     },
   },
@@ -106,11 +136,12 @@ export default {
       <button
         type="button"
         class="my-5 mx-auto w-full rounded border-2 border-pink-500 bg-indigo-500/[0.05] py-2 px-4 font-bold text-pink-500 hover:cursor-pointer hover:border-purple-500 hover:text-purple-500 disabled:cursor-not-allowed lg:my-20"
+        :disabled="!textToReplace"
         @click="replaceText"
       >
         Generate
       </button>
-      <section class="flex w-full flex-col gap-3">
+      <section class="relative flex w-full flex-col gap-3">
         <h2
           v-if="textReplaced"
           class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
@@ -118,6 +149,14 @@ export default {
           Your new text
         </h2>
         <div v-html="textReplaced" />
+        <button
+          v-if="textReplaced"
+          class="absolute right-0 top-10 flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8] md:top-10"
+          type="button"
+          @click="copyToClipboard"
+        >
+          <ClipboardDocumentIcon class="h-3 w-3" />Copy
+        </button>
       </section>
     </div>
   </main>

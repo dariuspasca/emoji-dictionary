@@ -8,6 +8,7 @@ import { ref } from "vue";
 import { useAuthStore } from "./auth";
 import type { DictionaryPage, Dictionary } from "@/models/DictionaryPage";
 import type SupabaseError from "@/models/SupabaseError";
+import { notify } from "@/helpers/notiwind";
 import router from "@/router";
 
 export const useProfileStore = defineStore("profile", () => {
@@ -36,6 +37,15 @@ export const useProfileStore = defineStore("profile", () => {
         console.log(error.message);
       } else {
         console.log("Unexpected error", error);
+        notify(
+          {
+            group: "bottom",
+            title: "Error",
+            text: "Ops, something unexpected happened",
+            type: "error",
+          },
+          2000
+        );
       }
     } finally {
       isLoading.value = false;
@@ -58,6 +68,15 @@ export const useProfileStore = defineStore("profile", () => {
       if (data.length) {
         dictionaries.value = data;
         router.push(`/dashboard`);
+        notify(
+          {
+            group: "bottom",
+            title: "Success",
+            text: "New dictionary created",
+            type: "success",
+          },
+          2000
+        );
       }
     } catch (error) {
       const err = error as SupabaseError;
@@ -67,7 +86,15 @@ export const useProfileStore = defineStore("profile", () => {
           newDictionary.name,
         ];
       } else if (err.code === "23514") {
-        console.log("name too short");
+        notify(
+          {
+            group: "bottom",
+            title: "Error",
+            text: "Dictionary name should be at least 3 characters",
+            type: "error",
+          },
+          2000
+        );
       }
     } finally {
       isLoading.value = false;
@@ -97,7 +124,15 @@ export const useProfileStore = defineStore("profile", () => {
               }
             : dictionary
         );
-        // router.push(`/dashboard`);
+        notify(
+          {
+            group: "bottom",
+            title: "Success",
+            text: "Dictionary updated",
+            type: "success",
+          },
+          2000
+        );
       }
     } catch (error) {
       const err = error as SupabaseError;
@@ -107,7 +142,15 @@ export const useProfileStore = defineStore("profile", () => {
           updateDictionary.name,
         ];
       } else if (err.code === "23514") {
-        console.log("name too short");
+        notify(
+          {
+            group: "bottom",
+            title: "Error",
+            text: "Dictionary name should be at least 3 characters",
+            type: "error",
+          },
+          2000
+        );
       }
     } finally {
       isLoading.value = false;
@@ -123,11 +166,29 @@ export const useProfileStore = defineStore("profile", () => {
       const { error } = await supabase.from("dictionary").delete().eq("id", id);
 
       if (error) throw error;
+      notify(
+        {
+          group: "bottom",
+          title: "Success",
+          text: "Dictionary deleted",
+          type: "success",
+        },
+        2000
+      );
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
       } else {
         console.log("Unexpected error", error);
+        notify(
+          {
+            group: "bottom",
+            title: "Error",
+            text: "Ops, something unexpected happened",
+            type: "error",
+          },
+          2000
+        );
       }
       dictionaries.value = tempDictionary;
     } finally {
