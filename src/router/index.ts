@@ -60,7 +60,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
-  if (to.path === "/") {
+  if (to.path === "/" && authStore.isLoggedIn) {
     return next("/dashboard");
   }
 
