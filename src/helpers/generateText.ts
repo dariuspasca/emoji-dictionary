@@ -1,19 +1,26 @@
 import type { DictionaryWord } from "@/models/DictionaryPage";
+import { serializeString, deserializeString } from "@/helpers/stringSerializer";
 
 const generateText = (
   textToReplace: string,
   wordSet: Array<DictionaryWord>
 ) => {
+  let textWithUnicodeEmoji = serializeString(textToReplace);
+
   for (const { word, alternatives } of wordSet) {
-    textToReplace = textToReplace.replace(
-      new RegExp(`(^|\\s)${word}(\\s|$)`, "g"),
-      `$1[${alternatives[0]}]$2`
+    console.log("🚀 ~ file: generateText.ts:11 ~ alternatives:", alternatives);
+    console.log("🚀 ~ file: generateText.ts:11 ~ word:", word);
+    textWithUnicodeEmoji = textWithUnicodeEmoji.replace(
+      word,
+      `[${alternatives[0]}]`
     );
   }
+
+  const textWithEmojii = deserializeString(textWithUnicodeEmoji);
   return (
     '<div v-html="rawHtml">' +
-    textToReplace.replace(
-      /\[(\w+)\]/g,
+    textWithEmojii.replace(
+      /\[(.*?)\]/g,
       `<span v-html="rawHtml" class="mx-1 w-auto rounded bg-slate-300 px-2 text-zinc-900">$1</span>`
     ) +
     "</div>"

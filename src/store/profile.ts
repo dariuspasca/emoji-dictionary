@@ -1,5 +1,9 @@
 import { defineStore, storeToRefs } from "pinia";
 import { supabase } from "@/helpers/supabase";
+import {
+  serializeEntries,
+  deserializeEntries,
+} from "@/helpers/entriesSerializer";
 import { ref } from "vue";
 import { useAuthStore } from "./auth";
 import type { DictionaryPage, Dictionary } from "@/models/DictionaryPage";
@@ -24,7 +28,7 @@ export const useProfileStore = defineStore("profile", () => {
       if (data.length) {
         dictionaries.value = data.map((dictionary) => ({
           ...dictionary,
-          entries: JSON.parse(dictionary.entries),
+          entries: deserializeEntries(JSON.parse(dictionary.entries)),
         }));
       }
     } catch (error) {
@@ -40,12 +44,13 @@ export const useProfileStore = defineStore("profile", () => {
 
   const createDictionary = async (newDictionary: Dictionary) => {
     try {
+      isLoading.value = true;
       const { data, error } = await supabase
         .from("dictionary")
         .insert({
           ...newDictionary,
           user_id: user.value?.id,
-          entries: JSON.stringify(newDictionary.entries),
+          entries: JSON.stringify(serializeEntries(newDictionary.entries)),
         })
         .select();
 
@@ -71,24 +76,28 @@ export const useProfileStore = defineStore("profile", () => {
 
   const updateDictionary = async (updateDictionary: Dictionary) => {
     try {
+      isLoading.value = true;
       const { data, error } = await supabase
         .from("dictionary")
         .update({
           ...updateDictionary,
-          entries: JSON.stringify(updateDictionary.entries),
+          entries: JSON.stringify(serializeEntries(updateDictionary.entries)),
         })
         .eq("user_id", user.value?.id)
         .select();
 
       if (error) throw error;
       if (data.length) {
-        const updatedDictionary = data[0] as DictionaryPage;
+        const newDictionary = data[0];
         dictionaries.value = dictionaries.value!.map((dictionary) =>
-          dictionary.id === updatedDictionary.id
-            ? { ...updatedDictionary }
+          dictionary.id === newDictionary.id
+            ? {
+                ...newDictionary,
+                entries: deserializeEntries(JSON.parse(newDictionary.entries)),
+              }
             : dictionary
         );
-        router.push(`/dashboard`);
+        // router.push(`/dashboard`);
       }
     } catch (error) {
       const err = error as SupabaseError;
