@@ -2,6 +2,7 @@
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import Modal from "@/components/Modal.vue";
 import type { DictionaryWord } from "@/models/DictionaryPage";
+import { deserializeEntries } from "@/helpers/entriesSerializer";
 
 export default {
   id: "DictionaryDetails",
@@ -10,6 +11,11 @@ export default {
   props: {
     show: Boolean,
     entries: { required: true, type: Array<DictionaryWord> },
+  },
+  computed: {
+    serializedEntries() {
+      return deserializeEntries(this.entries);
+    },
   },
 };
 </script>
@@ -29,7 +35,7 @@ export default {
         <ul>
           <li
             class="flex justify-between px-4 py-2 text-gray-200 hover:bg-zinc-700/[0.25]"
-            v-for="item in entries"
+            v-for="item in serializedEntries"
             :key="item.word"
           >
             <span class="w-6/12 text-left"> {{ item.word }}</span>
