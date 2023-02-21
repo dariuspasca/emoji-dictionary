@@ -3,12 +3,16 @@ import { ref } from "vue";
 import { supabase } from "@/helpers/supabase";
 import type { User } from "@supabase/gotrue-js";
 import { useAuthStore } from "@/store/auth";
+import { NotificationGroup } from "@/helpers/notiwind";
+import NotificationToast from "@/components/NotificationToast.vue";
 import NavigationHeader from "@/components/NavigationHeader.vue";
 
 export default {
   name: "App",
   components: {
     NavigationHeader,
+    NotificationGroup,
+    NotificationToast,
   },
   setup() {
     const appReady = ref(false);
@@ -35,6 +39,13 @@ export default {
 </script>
 
 <template>
+  <NotificationGroup group="bottom" position="bottom">
+    <div
+      class="pointer-events-none fixed inset-x-0 bottom-0 flex items-start justify-end p-6 px-4 py-6"
+    >
+      <div class="w-full max-w-sm"><NotificationToast /></div>
+    </div>
+  </NotificationGroup>
   <div v-if="appReady" class="box-border h-screen bg-zinc-900">
     <NavigationHeader />
     <RouterView />
