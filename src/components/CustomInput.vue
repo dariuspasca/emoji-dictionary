@@ -57,7 +57,7 @@ export default {
 <template>
   <div class="relative flex flex-grow">
     <input
-      class="flex-grow appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400 shadow"
+      class="z-0 flex-grow appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400 shadow"
       v-bind="inputProps"
       v-model="input"
     />
@@ -70,7 +70,7 @@ export default {
       <FaceSmileIcon class="h-6 w-6 text-zinc-500 hover:text-zinc-400" />
     </button>
     <EmojiPicker
-      class="absolute right-2 top-10"
+      class="absolute right-2 top-10 z-10"
       theme="dark"
       :native="true"
       @select="onSelect"
