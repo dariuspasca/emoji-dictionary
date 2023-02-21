@@ -63,7 +63,7 @@ export default {
     <modal :show="show">
       <template #header>
         <div class="flex flex-row items-center justify-between">
-          <h3 class="text-lg font-medium text-white">Add a new word</h3>
+          <h3 class="text-lg font-medium text-white">Add a new entry</h3>
           <button role="button" @click="$emit('closeModal')">
             <XMarkIcon class="h-6 w-6 text-indigo-500" />
           </button>
@@ -77,7 +77,7 @@ export default {
             >Word</label
           >
           <CustomInput
-            :input-props="{ type: 'text', placeholder: 'Your emoji' }"
+            :input-props="{ type: 'text', placeholder: 'Your word/emoji' }"
             @update="onChangeText"
           />
         </div>
@@ -90,7 +90,7 @@ export default {
           >
           <CustomInput
             :input-props="{ type: 'text', placeholder: 'Replace with' }"
-            @update="onChangeText"
+            @update="onChangeAlternatives"
           />
         </div>
         <p v-if="isAlternativeSameWord" class="mt-2 text-sm text-pink-500">
@@ -100,7 +100,7 @@ export default {
       <template #footer>
         <button
           type="button"
-          class="mt-4 w-full rounded border-2 bg-zinc-800 py-2 px-8 text-sm font-bold text-gray-200 hover:bg-zinc-900/[0.95]"
+          class="mt-4 w-full cursor-pointer rounded border-2 bg-zinc-800 py-2 px-8 text-sm font-bold text-gray-200 hover:bg-zinc-900/[0.95] disabled:cursor-not-allowed"
           :disabled="isAddButtonDisabled"
           @click="addNewWord"
         >
