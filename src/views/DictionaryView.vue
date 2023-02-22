@@ -98,7 +98,7 @@ export default {
           "Emoji Dictionary: Replace words with other words 😯",
         url: `${window.location.href}${
           this.textToReplace
-            ? `?share=${this.textToReplace.replaceAll(" ", "-")}`
+            ? `?share=${this.textToReplace.replace(/\s/g, "-")}`
             : ""
         }`,
       };
@@ -129,7 +129,7 @@ export default {
                 text: "Link copied to your clipboard",
                 type: "success",
               },
-              12200
+              2000
             );
           },
           () => {
@@ -165,7 +165,7 @@ export default {
       this.getDictionary(name);
     }
     if (typeof share === "string") {
-      this.textToReplace = share.replaceAll("-", " ");
+      this.textToReplace = share.replace(/-/g, " ");
     }
   },
 };

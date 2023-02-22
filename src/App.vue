@@ -41,7 +41,7 @@ export default {
 <template>
   <NotificationGroup group="bottom" position="bottom">
     <div
-      class="z-90 pointer-events-none fixed inset-x-0 bottom-0 flex items-start justify-end p-6 px-4 py-6"
+      class="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex items-start justify-end p-6 px-4 py-6"
     >
       <div class="w-full max-w-sm"><NotificationToast /></div>
     </div>
