@@ -148,13 +148,13 @@ export default {
     },
   },
   computed: {
-    dictionaryTitle() {
+    dictionaryTitle(): string {
       return this.dictionary.title ?? `${this.dictionaryName} dictionary`;
     },
-    dictionaryName() {
+    dictionaryName(): string | string[] {
       return this.$route.params.name;
     },
-    webShareApiSupported() {
+    webShareApiSupported(): boolean {
       return !!navigator.canShare;
     },
   },
