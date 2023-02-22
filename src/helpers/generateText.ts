@@ -15,14 +15,16 @@ const generateText = (
   }
 
   const rawText = deserializeString(textWithUnicodeEmoji);
-  const formattedText =
+
+  const formattedText = rawText.replace(/\[(.*?)\]/g, `$1`);
+  const formattedHtmlText =
     '<div v-html="rawHtml">' +
     rawText.replace(
       /\[(.*?)\]/g,
       `<span v-html="rawHtml" class="mx-1 w-auto rounded bg-slate-300 px-2 text-zinc-900">$1</span>`
     ) +
     "</div>";
-  return { rawText, formattedText };
+  return { formattedText, formattedHtmlText };
 };
 
 export default generateText;

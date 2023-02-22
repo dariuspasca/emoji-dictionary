@@ -48,12 +48,12 @@ export default {
       }
     },
     replaceText() {
-      const { rawText, formattedText } = generateText(
+      const { formattedText, formattedHtmlText } = generateText(
         this.textToReplace,
         this.dictionary.entries
       );
-      this.textReplacedRaw = rawText;
-      this.textReplaced = formattedText;
+      this.textReplacedRaw = formattedText;
+      this.textReplaced = formattedHtmlText;
     },
     copyToClipboard() {
       navigator.clipboard.writeText(this.textReplacedRaw).then(
