@@ -1,7 +1,11 @@
 <script lang="ts">
 import { ref } from "vue";
 import { supabase } from "@/helpers/supabase";
-import { DocumentIcon, ClipboardDocumentIcon } from "@heroicons/vue/24/solid";
+import {
+  DocumentIcon,
+  ClipboardDocumentIcon,
+  ShareIcon,
+} from "@heroicons/vue/24/solid";
 import { notify } from "@/helpers/notiwind";
 import type { DictionaryPage } from "@/models/DictionaryPage";
 import DictionaryDetails from "@/components/DictionaryDetails.vue";
@@ -9,7 +13,12 @@ import generateText from "@/helpers/generateText";
 import router from "@/router";
 
 export default {
-  components: { DocumentIcon, DictionaryDetails, ClipboardDocumentIcon },
+  components: {
+    DocumentIcon,
+    DictionaryDetails,
+    ClipboardDocumentIcon,
+    ShareIcon,
+  },
   data() {
     return {
       dictionary: {} as DictionaryPage,
@@ -81,22 +90,91 @@ export default {
         }
       );
     },
+    async shareLink() {
+      const shareData = {
+        title: this.dictionaryTitle,
+        text:
+          this.dictionary.description ??
+          "Emoji Dictionary: Replace words with other words 😯",
+        url: `${window.location.href}${
+          this.textToReplace
+            ? `?share=${this.textToReplace.replaceAll(" ", "-")}`
+            : ""
+        }`,
+      };
+
+      if (this.webShareApiSupported) {
+        try {
+          await navigator.share(shareData);
+          console.log("Article shared!");
+        } catch (err) {
+          console.error("Failed to share link with err", err);
+          notify(
+            {
+              group: "bottom",
+              title: "Error",
+              text: "Ops, something went wrong",
+              type: "error",
+            },
+            2000
+          );
+        }
+      } else {
+        navigator.clipboard.writeText(shareData.url).then(
+          () => {
+            notify(
+              {
+                group: "bottom",
+                title: "Success",
+                text: "Link copied to your clipboard",
+                type: "success",
+              },
+              12200
+            );
+          },
+          () => {
+            notify(
+              {
+                group: "bottom",
+                title: "Error",
+                text: "Ops, something went wrong",
+                type: "error",
+              },
+              2000
+            );
+          }
+        );
+      }
+    },
+  },
+  computed: {
+    dictionaryTitle() {
+      return this.dictionary.title ?? `${this.dictionaryName} dictionary`;
+    },
+    dictionaryName() {
+      return this.$route.params.name;
+    },
+    webShareApiSupported() {
+      return !!navigator.canShare;
+    },
   },
   mounted() {
-    const name = this.$route.params.name;
+    const name = this.dictionaryName;
     const share = this.$route.query.share;
     if (typeof name === "string") {
       this.getDictionary(name);
     }
     if (typeof share === "string") {
-      this.textToReplace = share.replace("-", " ");
+      this.textToReplace = share.replaceAll("-", " ");
     }
   },
 };
 </script>
 
 <template>
-  <main class="bg-zinc-900 py-10 text-left text-gray-100">
+  <main
+    class="relative mt-10 flex h-[calc(100vh-120px)] bg-zinc-900 text-left text-gray-100"
+  >
     <div v-if="isLoading" class="mt-6 text-center text-lg">Loading ...</div>
 
     <div
@@ -106,9 +184,12 @@ export default {
       <h1
         class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-5xl font-extrabold text-transparent"
       >
-        {{ dictionary.title }}
+        {{ dictionaryTitle }}
       </h1>
-      <h2 class="mb-4 text-xl font-medium text-gray-300">
+      <h2
+        v-if="dictionary.description"
+        class="mb-4 text-xl font-medium text-gray-300"
+      >
         {{ dictionary.description }}
       </h2>
       <button
@@ -159,6 +240,14 @@ export default {
         </button>
       </section>
     </div>
+    <button
+      v-if="!isLoading"
+      class="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
+      type="button"
+      @click="shareLink"
+    >
+      <ShareIcon class="h-3 w-3" />Share
+    </button>
   </main>
   <DictionaryDetails
     :show="showModal"
