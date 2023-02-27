@@ -65,30 +65,17 @@ export default {
       this.textReplaced = formattedHtmlText;
     },
     copyToClipboard() {
-      navigator.clipboard.writeText(this.textReplacedRaw).then(
-        () => {
-          notify(
-            {
-              group: "bottom",
-              title: "Success",
-              text: "Text copied",
-              type: "success",
-            },
-            2000
-          );
-        },
-        () => {
-          notify(
-            {
-              group: "bottom",
-              title: "Error",
-              text: "Ops, can't copy text",
-              type: "error",
-            },
-            2000
-          );
-        }
-      );
+      navigator.clipboard.writeText(this.textReplacedRaw).then(() => {
+        notify(
+          {
+            group: "bottom",
+            title: "Success",
+            text: "Text copied",
+            type: "success",
+          },
+          2000
+        );
+      });
     },
     async shareLink() {
       const shareData = {
@@ -97,8 +84,8 @@ export default {
           this.dictionary.description ??
           "Emoji Dictionary: Replace words with other words 😯",
         url: `${window.location.href}${
-          this.textToReplace
-            ? `?share=${this.textToReplace.replace(/\s/g, "-")}`
+          this.textReplacedRaw
+            ? `?share=${this.textReplacedRaw.replace(/\s/g, "-")}`
             : ""
         }`,
       };
