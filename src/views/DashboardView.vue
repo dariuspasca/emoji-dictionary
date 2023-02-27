@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template>
-  <main class="bg-zinc-900 py-10 text-left text-gray-100">
+  <main class="py-4 text-left text-gray-100">
     <div class="mx-4 flex flex-col md:mx-auto md:max-w-2xl lg:max-w-6xl">
       <div class="flex justify-between">
         <h1 class="text-2xl">Dashboard</h1>

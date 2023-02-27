@@ -31,8 +31,8 @@ export default {
 </script>
 
 <template>
-  <main class="bg-zinc-900 text-left text-gray-100">
-    <div v-if="dictionary">
+  <main class="mx-4 text-left text-gray-100 md:mx-auto md:max-w-xl">
+    <div v-if="dictionary" class="mx-4">
       <DictionaryForm :dictionary="dictionary" is-edit-mode />
     </div>
     <div v-else class="container mx-auto mt-20 text-center">

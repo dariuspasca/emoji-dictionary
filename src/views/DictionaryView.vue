@@ -30,7 +30,7 @@ export default {
     };
   },
   methods: {
-    async getDictionary(name: string) {
+    async setDictionary(name: string) {
       try {
         this.isLoading = true;
         const { data, error } = await supabase
@@ -162,7 +162,7 @@ export default {
     const name = this.dictionaryName;
     const share = this.$route.query.share;
     if (typeof name === "string") {
-      this.getDictionary(name);
+      this.setDictionary(name);
     }
     if (typeof share === "string") {
       this.textToReplace = share.replace(/-/g, " ");
@@ -173,13 +173,13 @@ export default {
 
 <template>
   <main
-    class="relative mt-10 flex h-[calc(100vh-120px)] bg-zinc-900 text-left text-gray-100"
+    class="relative mt-4 flex h-[calc(100vh-100px)] flex-col text-left text-slate-100"
   >
     <div v-if="isLoading" class="mt-6 text-center text-lg">Loading ...</div>
 
     <div
       v-else
-      class="relative mx-8 flex flex-col items-start gap-2 md:mx-auto md:max-w-xl md:pt-20"
+      class="mx-4 flex flex-grow flex-col items-start gap-2 md:mx-auto md:max-w-xl"
     >
       <h1
         class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-5xl font-extrabold text-transparent"
@@ -188,66 +188,81 @@ export default {
       </h1>
       <h2
         v-if="dictionary.description"
-        class="mb-4 text-xl font-medium text-gray-300"
+        class="mb-4 text-xl font-medium text-slate-300"
       >
         {{ dictionary.description }}
       </h2>
+
+      <Transition name="fade" mode="out-in">
+        <section class="mt-5 flex w-full flex-col gap-3" v-if="!textReplaced">
+          <label
+            for="textToReplace"
+            class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
+            >Insert your text</label
+          >
+          <textarea
+            v-model="textToReplace"
+            required
+            rows="8"
+            cols="33"
+            class="h-56 w-full resize-none appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400"
+          />
+          <button
+            type="button"
+            class="my-5 mx-auto w-full rounded border-2 border-pink-500 bg-indigo-500/[0.05] py-2 px-4 font-bold text-pink-500 hover:cursor-pointer hover:border-purple-500 hover:text-purple-500 disabled:cursor-not-allowed"
+            :disabled="!textToReplace"
+            @click="replaceText"
+          >
+            Generate
+          </button>
+        </section>
+
+        <section class="relative flex w-full flex-col gap-3" v-else>
+          <h2
+            class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
+          >
+            Your new text
+          </h2>
+
+          <div
+            class="h-56 w-full resize-none appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400"
+          >
+            <button
+              class="float-right mt-1 flex items-center gap-1 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
+              type="button"
+              @click="copyToClipboard"
+            >
+              <ClipboardDocumentIcon class="h-3 w-3" />Copy
+            </button>
+            <div v-html="textReplaced" />
+          </div>
+          <button
+            type="button"
+            class="my-5 mx-auto w-full rounded border-2 border-pink-500 bg-indigo-500/[0.05] py-2 px-4 font-bold text-pink-500 hover:cursor-pointer hover:border-purple-500 hover:text-purple-500 disabled:cursor-not-allowed"
+            @click="textReplaced = ''"
+          >
+            Try again
+          </button>
+        </section>
+      </Transition>
+    </div>
+    <div class="flex justify-center gap-4" v-if="!isLoading">
       <button
-        class="absolute right-0 -top-8 flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8] md:top-10"
+        v-if="!isLoading"
+        class="flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
+        type="button"
+        @click="shareLink"
+      >
+        <ShareIcon class="h-3 w-3" />Share
+      </button>
+      <button
+        class="flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
         type="button"
         @click="showModal = true"
       >
         <DocumentIcon class="h-3 w-3" />Dictionary
       </button>
-
-      <section class="flex w-full flex-col gap-3">
-        <label
-          for="textToReplace"
-          class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
-          >Insert your text</label
-        >
-        <textarea
-          v-model="textToReplace"
-          required
-          rows="5"
-          cols="33"
-          class="h-full w-full resize-none appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400"
-        />
-      </section>
-      <button
-        type="button"
-        class="my-5 mx-auto w-full rounded border-2 border-pink-500 bg-indigo-500/[0.05] py-2 px-4 font-bold text-pink-500 hover:cursor-pointer hover:border-purple-500 hover:text-purple-500 disabled:cursor-not-allowed lg:my-20"
-        :disabled="!textToReplace"
-        @click="replaceText"
-      >
-        Generate
-      </button>
-      <section class="relative flex w-full flex-col gap-3">
-        <h2
-          v-if="textReplaced"
-          class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
-        >
-          Your new text
-        </h2>
-        <div v-html="textReplaced" />
-        <button
-          v-if="textReplaced"
-          class="absolute right-0 top-10 flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8] md:top-10"
-          type="button"
-          @click="copyToClipboard"
-        >
-          <ClipboardDocumentIcon class="h-3 w-3" />Copy
-        </button>
-      </section>
     </div>
-    <button
-      v-if="!isLoading"
-      class="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
-      type="button"
-      @click="shareLink"
-    >
-      <ShareIcon class="h-3 w-3" />Share
-    </button>
   </main>
   <DictionaryDetails
     :show="showModal"
@@ -255,3 +270,15 @@ export default {
     @closeModal="showModal = false"
   />
 </template>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

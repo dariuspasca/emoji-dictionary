@@ -10,7 +10,7 @@ export default {
   emits: ["closeModal"],
   props: {
     show: Boolean,
-    entries: { required: true, type: Array<DictionaryWord> },
+    entries: { required: true, type: Array<DictionaryWord>, default: [] },
   },
   computed: {
     serializedEntries() {

@@ -1,6 +1,8 @@
 <script lang="ts">
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/auth";
+import { BookOpenIcon } from "@heroicons/vue/24/solid";
+import { ChevronLeftIcon } from "@heroicons/vue/24/solid";
 
 export default {
   setup() {
@@ -13,6 +15,7 @@ export default {
       logOut,
     };
   },
+  components: { BookOpenIcon, ChevronLeftIcon },
   computed: {
     currentRouteName() {
       return this.$route.name;
@@ -23,24 +26,22 @@ export default {
 
 <template>
   <header class="bg-zinc-900">
-    <div class="mx-4 flex md:container md:mx-auto">
-      <nav class="flex w-full justify-end py-4 text-gray-100 md:mx-8">
+    <div class="mx-4 flex md:container md:mx-auto md:mx-auto md:max-w-2xl">
+      <nav class="flex w-full justify-start py-4 text-slate-300 md:mx-8">
         <RouterLink
           v-if="currentRouteName != 'dashboard' && user"
           to="/dashboard"
-          class="flex-1"
-          >Dashboard</RouterLink
+          class="inline-flex items-center text-slate-300"
+          ><ChevronLeftIcon class="h-5 w-5" />Dashboard</RouterLink
         >
         <RouterLink
           v-if="currentRouteName != 'home' && !user"
           to="/"
-          class="flex-1"
-          >Home</RouterLink
+          class="inline-flex flex-1 items-center gap-1"
         >
-        <RouterLink v-if="currentRouteName != 'login' && !user" to="/login"
-          >Login</RouterLink
+          <BookOpenIcon class="h-5 w-5" />Emoji-Dictionary</RouterLink
         >
-        <button v-if="user" @click="logOut">Logout</button>
+        <button v-if="user" class="ml-auto" @click="logOut">Logout</button>
       </nav>
     </div>
   </header>

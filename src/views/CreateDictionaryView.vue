@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-  <main class="bg-zinc-900 py-10 text-left text-gray-100">
-    <DictionaryForm />
+  <main class="mx-4 text-left text-gray-100 md:mx-auto md:max-w-xl">
+    <div class="mx-4"><DictionaryForm /></div>
   </main>
 </template>
