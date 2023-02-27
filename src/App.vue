@@ -39,7 +39,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col">
+  <div class="min-safe-h-screen flex flex-col">
     <NotificationGroup group="bottom" position="bottom">
       <div
         class="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex items-start justify-end p-6 px-4 py-6"
