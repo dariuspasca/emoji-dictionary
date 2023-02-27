@@ -83,9 +83,9 @@ export default {
         text:
           this.dictionary.description ??
           "Emoji Dictionary: Replace words with other words 😯",
-        url: `${window.location.href}${
-          this.textReplacedRaw
-            ? `?share=${this.textReplacedRaw.replace(/\s/g, "-")}`
+        url: `${window.location.href.split("?")[0]}${
+          this.textToReplace
+            ? `?share=${this.textToReplace.replace(/\s/g, "-")}`
             : ""
         }`,
       };

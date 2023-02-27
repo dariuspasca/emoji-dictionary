@@ -46,7 +46,10 @@ export default {
       <div class="w-full max-w-sm"><NotificationToast /></div>
     </div>
   </NotificationGroup>
-  <div v-if="appReady" class="box-border min-h-screen bg-zinc-900">
+  <div
+    v-if="appReady"
+    class="absolute inset-0 box-border min-h-screen bg-zinc-900"
+  >
     <NavigationHeader />
     <RouterView />
   </div>
