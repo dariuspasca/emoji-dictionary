@@ -26,7 +26,7 @@ export default {
 
 <template>
   <header class="bg-zinc-900">
-    <div class="mx-4 flex md:container md:mx-auto md:mx-auto md:max-w-2xl">
+    <div class="mx-4 flex md:container md:mx-auto md:max-w-2xl">
       <nav class="flex w-full justify-start py-4 text-slate-300 md:mx-8">
         <RouterLink
           v-if="currentRouteName != 'dashboard' && user"
