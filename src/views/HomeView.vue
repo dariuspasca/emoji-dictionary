@@ -15,7 +15,7 @@ export default {
 
 <template>
   <main
-    class="relative mt-4 flex h-[calc(100vh-60px)] flex-col items-center justify-start gap-4 px-10 md:mx-auto md:max-w-xl"
+    class="relative my-4 flex flex-grow flex-col items-center justify-start gap-4 px-10 md:mx-auto md:max-w-xl"
   >
     <div>
       <h1

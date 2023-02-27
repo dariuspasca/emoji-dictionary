@@ -39,18 +39,17 @@ export default {
 </script>
 
 <template>
-  <NotificationGroup group="bottom" position="bottom">
-    <div
-      class="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex items-start justify-end p-6 px-4 py-6"
-    >
-      <div class="w-full max-w-sm"><NotificationToast /></div>
+  <div class="flex min-h-screen flex-col">
+    <NotificationGroup group="bottom" position="bottom">
+      <div
+        class="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex items-start justify-end p-6 px-4 py-6"
+      >
+        <div class="w-full max-w-sm"><NotificationToast /></div>
+      </div>
+    </NotificationGroup>
+    <div v-if="appReady" class="relative flex flex-grow flex-col bg-zinc-900">
+      <NavigationHeader />
+      <RouterView />
     </div>
-  </NotificationGroup>
-  <div
-    v-if="appReady"
-    class="absolute inset-0 box-border min-h-screen bg-zinc-900"
-  >
-    <NavigationHeader />
-    <RouterView />
   </div>
 </template>

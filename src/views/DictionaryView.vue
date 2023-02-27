@@ -80,9 +80,6 @@ export default {
     async shareLink() {
       const shareData = {
         title: this.dictionaryTitle,
-        text:
-          this.dictionary.description ??
-          "Emoji Dictionary: Replace words with other words 😯",
         url: `${window.location.href.split("?")[0]}${
           this.textToReplace
             ? `?share=${this.textToReplace.replace(/\s/g, "-")}`
@@ -159,9 +156,7 @@ export default {
 </script>
 
 <template>
-  <main
-    class="relative mt-4 flex h-[calc(100vh-100px)] flex-col text-left text-slate-100"
-  >
+  <main class="relative my-4 flex flex-grow flex-col text-left text-slate-100">
     <div v-if="isLoading" class="mt-6 text-center text-lg">Loading ...</div>
 
     <div
@@ -243,7 +238,7 @@ export default {
         <ShareIcon class="h-3 w-3" />Share
       </button>
       <button
-        class="flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
+        class="mb-b flex items-center gap-2 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
         type="button"
         @click="showModal = true"
       >
