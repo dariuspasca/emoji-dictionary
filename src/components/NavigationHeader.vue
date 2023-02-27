@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/auth";
 import { BookOpenIcon } from "@heroicons/vue/24/solid";
 import { ChevronLeftIcon } from "@heroicons/vue/24/solid";
+import type { RouteRecordName } from "vue-router";
 
 export default {
   setup() {
@@ -17,7 +18,7 @@ export default {
   },
   components: { BookOpenIcon, ChevronLeftIcon },
   computed: {
-    currentRouteName() {
+    currentRouteName(): RouteRecordName | null | undefined {
       return this.$route.name;
     },
   },
