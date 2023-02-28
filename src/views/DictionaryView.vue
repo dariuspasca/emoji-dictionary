@@ -161,7 +161,7 @@ export default {
 
     <div
       v-else
-      class="mx-4 flex flex-grow flex-col items-start gap-2 md:mx-auto md:max-w-xl"
+      class="mx-4 flex flex-grow flex-col items-start gap-2 md:mx-auto md:w-1/2 xl:w-2/5"
     >
       <h1
         class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-5xl font-extrabold text-transparent"
@@ -199,7 +199,7 @@ export default {
           </button>
         </section>
 
-        <section class="relative flex w-full flex-col gap-3" v-else>
+        <section class="mt-5 flex w-full flex-col gap-3" v-else>
           <h2
             class="text-slate-302 text-normal mb-2 text-slate-200 md:mb-0 md:w-64 lg:text-lg"
           >
@@ -207,7 +207,7 @@ export default {
           </h2>
 
           <div
-            class="h-56 w-full resize-none appearance-none rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400"
+            class="h-56 w-full rounded border border-zinc-600 bg-zinc-800 py-2 px-3 text-gray-200 placeholder-stone-400"
           >
             <button
               class="float-right mt-1 flex items-center gap-1 rounded border border-zinc-600 py-1 px-2 text-xs text-zinc-200/[0.8] hover:bg-zinc-800/[0.8]"
