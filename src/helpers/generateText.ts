@@ -9,18 +9,18 @@ const generateText = (
 
   for (const { word, alternatives } of wordSet) {
     textWithUnicodeEmoji = textWithUnicodeEmoji.replace(
-      word,
+      new RegExp(word, "g"),
       `[${alternatives[0]}]`
     );
   }
 
   const rawText = deserializeString(textWithUnicodeEmoji);
 
-  const formattedText = rawText.replace(/\[(.*?)\]/g, `$1`);
+  const formattedText = rawText.replace(new RegExp(/\[(.*?)\]/g), `$1`);
   const formattedHtmlText =
     '<div v-html="rawHtml">' +
     rawText.replace(
-      /\[(.*?)\]/g,
+      new RegExp(/\[(.*?)\]/g),
       `<span v-html="rawHtml" class="mx-1 w-auto rounded bg-slate-300 px-2 text-zinc-900">$1</span>`
     ) +
     "</div>";
